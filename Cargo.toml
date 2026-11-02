@@ -1,0 +1,17 @@
+[package]
+name = "island"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+# default features off: the defaults include the GPU renderer (wgpu), which we avoid to save RAM.
+# "smol" is iced's small async runtime; its timer powers time::every (thread-pool has no timer).
+iced = { version = "0.14", default-features = false, features = ["tiny-skia", "smol"] }
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
