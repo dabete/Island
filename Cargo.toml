@@ -6,8 +6,15 @@ edition = "2024"
 [dependencies]
 # default features off: the defaults include the GPU renderer (wgpu), which we avoid to save RAM.
 # "smol" is iced's small async runtime; its timer powers time::every (thread-pool has no timer).
-iced = { version = "0.14", default-features = false, features = ["tiny-skia", "smol"] }
+iced = { version = "0.14", default-features = false, features = ["tiny-skia", "smol", "image-without-codecs"] }
+# Our own decoder for album covers: PNG and JPEG only, so no other codec is built in.
+image = { version = "0.25", default-features = false, features = ["png", "jpeg"] }
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
+
+# Windows-only: the window handle from iced and the Win32 calls in src/platform.rs.
+[target.'cfg(windows)'.dependencies]
+raw-window-handle = "0.6"
+windows = { version = "0.62", features = ["Foundation", "Foundation_Collections", "Media_Control", "Storage_Streams", "Win32_Foundation", "Win32_Graphics_Gdi", "Win32_UI_Accessibility", "Win32_UI_HiDpi", "Win32_UI_Shell", "Win32_UI_WindowsAndMessaging"] }
 
 [profile.release]
 opt-level = "s"
